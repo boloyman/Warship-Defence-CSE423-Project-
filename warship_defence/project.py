@@ -206,7 +206,7 @@ def display():
     global game_over, lives, score
 
     if lives == 0:
-        game_over = True  # Lives sesh hole game over hobe
+        game_over = True  
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
@@ -223,18 +223,18 @@ def display():
     draw_ship(ship_x, ship_y)
 
     # Score o lives top-right corner e dekhano
-    glColor3f(1.0, 1.0, 1.0)  # Score er color white thakbe
+    glColor3f(1.0, 1.0, 1.0) 
     glRasterPos2f(WINDOW_WIDTH - 120, WINDOW_HEIGHT - 30)
     lives_text = f"Lives: {lives}"
     for c in lives_text:
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(c))  # Lives er text display
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(c)) 
 
     # Score top-left corner e dekhano
-    glColor3f(1.0, 1.0, 1.0)  # Text er color white
+    glColor3f(1.0, 1.0, 1.0)  
     glRasterPos2f(10, WINDOW_HEIGHT - 30)
     score_text = f"Score: {score}"
     for c in score_text:
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(c))  # Score display
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(c)) 
 
     # "Game Over" message dekhano jodi game over hoye thake
     if game_over:
@@ -257,26 +257,26 @@ def update(value):
     global ship_y, ship_x, plane_arr, missiles, game_over, lives, score, paused
 
     if game_over or paused:
-        return  # Jodi game over hoye thake ba game pause thake, kono update kora jabe na
+        return  
 
     # Falling circles move kora leftward
     for circle in plane_arr[:]:
         circle[0] -= FALL_SPEED  # Circle er x position decrease kora
-        if circle[0] + CIRCLE_RADIUS < 0:  # Circle screen er baire giye gele remove kora
+        if circle[0] + CIRCLE_RADIUS < 0:  
             lives -= 1
             print(f"Lives Remaining: {lives}")
             plane_arr.remove(circle)
 
         # Rocket er sathe collision check kora
         if math.sqrt((ship_x - circle[0]) ** 2 + (ship_y - circle[1]) ** 2) < CIRCLE_RADIUS + ROCKET_SIZE // 2:
-            game_over = True  # Collision hole game over hobe
+            game_over = True  
             print("Game Over!")
             break
 
     # Random bhabe new plane spawn kora
     if random.random() < SPAWN_RATE:
         new_plane = [WINDOW_WIDTH, random.randint(250, 450)]
-        plane_arr.append(new_plane)  # Falling circles list e add kora
+        plane_arr.append(new_plane) 
 
     # Missiles move kora up (horizontal direction e)
     for missile in missiles[:]:
@@ -288,13 +288,13 @@ def update(value):
     for missile in missiles[:]:
         for circle in plane_arr[:]:
             distance = math.sqrt((missile[0] - circle[0]) ** 2 + (missile[1] - circle[1]) ** 2)
-            if distance < CIRCLE_RADIUS:  # Collision hole
-                missiles = [m for m in missiles if m != missile]  # Missile remove kora
-                plane_arr = [c for c in plane_arr if c != circle]  # Circle remove kora
-                score += 1  # Score barano
-                break  # Ekta missile multiple circle e collide na kore
+            if distance < CIRCLE_RADIUS: 
+                missiles = [m for m in missiles if m != missile]  
+                plane_arr = [c for c in plane_arr if c != circle] 
+                score += 1 
+                break  
 
-    glutPostRedisplay()  # Display update kora
+    glutPostRedisplay()  
     glutTimerFunc(24, update, 0)  # Update function abar call kora
 
 
@@ -303,15 +303,15 @@ def keyboard(key, x, y):
     """Keyboard input handle kora, spacebar missile fire korbe"""
     global ship_x, ship_y, plane_arr, missiles, game_over, lives, score, paused
 
-    if key == b'\x1b':  # Escape key press hole game bondho hoye jabe
+    if key == b'\x1b':  
         print('Game Over. Closing er jonno wait kora...')
         sys.exit()
 
-    if key == b' ':  # Spacebar press hole missile fire hobe
+    if key == b' ': 
         missile = [ship_x, ship_y + ROCKET_SIZE // 2]
         missiles.append(missile)
 
-    if key == b'r' or key == b'R':  # R key press hole game restart hobe
+    if key == b'r' or key == b'R':  
         print("Game restart hochhe...")
         ship_x = WINDOW_WIDTH // 2
         ship_y = 50
@@ -323,8 +323,8 @@ def keyboard(key, x, y):
         print("Game Start!")
         main()
 
-    if key == b'p' or key == b'P':  # P key press hole game pause/unpause hobe
-        paused = not paused  # Pause state toggle kora
+    if key == b'p' or key == b'P':  
+        paused = not paused  
         print('Game paused' if paused else 'Game unpaused')
 
 
